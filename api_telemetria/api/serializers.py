@@ -62,3 +62,18 @@ class UnidadeMedidaSerializer(serializers.ModelSerializer):
             'id': {'help_text': 'Identificador da Unidade de Medida'},
             'Nome': {'help_text': 'Nome da Unidade de Medida (Ex: °C, Bar, etc)'},
         }
+
+
+class UploadCSVSerializer(serializers.Serializer):
+    arquivo = serializers.FileField()
+
+    def validate_arquivo(self, value):
+        if not value.name.lower().endswith(".csv"):
+            raise serializers.ValidationError("O arquivo enviado não é um CSV válido.")
+        return value
+
+
+class MedicaoVeiculoTempSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.MedicaoVeiculoTemp
+        fields = "__all__"

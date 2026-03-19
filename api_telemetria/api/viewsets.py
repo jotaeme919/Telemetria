@@ -3,6 +3,13 @@ from api_telemetria import models
 from api_telemetria.api import serializers
 from drf_yasg.utils import swagger_auto_schema
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.parsers import MultiPartParser, FormParser
+from api_telemetria.api.services import processar_csv_medicoes
+
+
 class VeiculoViewSet(viewsets.ModelViewSet):
     queryset = models.Veiculo.objects.all()
     serializer_class = serializers.VeiculoSerializer
@@ -193,6 +200,8 @@ class MedicaoViewSet(viewsets.ModelViewSet):
         operation_description="Cria um novo registro de medição de telemetria",
         responses={201: serializers.MedicaoSerializer(many=True)},
     )
+    
+
     def create(self, request, *args, **kwargs):
         return super().create(request, *args, **kwargs)
     
@@ -258,3 +267,43 @@ class UnidadeMedidaViewSet(viewsets.ModelViewSet):
     )
     def destroy(self, request, *args, **kwargs):
         return super().destroy(request, *args, **kwargs)
+    
+class ImportarMedicaoCSVViewSet(APIView):
+    parser_classes = [MultiPartParser, FormParser]
+
+    def post(self, request, *args, **kwargs):
+        serializer = serializers.UploadCSVSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        arquivo = serializer.validated_data["arquivo"]
+
+        try:
+            resultado = processar_csv_medicoes(arquivo)
+
+            return Response(
+                {
+                    "mensagem": "Arquivo processado com sucesso.",
+                    **resultado
+                },
+                status=status.HTTP_201_CREATED
+            )
+
+        except Exception as e:
+            return Response(
+                {
+                    "erro": "Falha ao processar o arquivo.",
+                    "detalhe": str(e)
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+    
+class MedicaVeiculoTempViewsets(viewsets.ModelViewSet):
+    serializer_class = serializers.MedicaoVeiculoTempSerializer
+    queryset = models.MedicaoVeiculo.objects.all()
+
+    @swagger_auto_schema(
+        operation_description="Retorna todas as informações de medições dos arquivos",
+        responses={200: serializers.MedicaoVeiculoTempSerializer(many=True)}
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)

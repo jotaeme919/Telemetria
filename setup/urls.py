@@ -21,6 +21,9 @@ from api_telemetria.api import viewsets
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 
+from django.conf.urls.static import static
+from django.conf import settings
+
 schema_view = get_schema_view(
     openapi.Info(
         title='API de Telemetria - Veículos Agrícolas',
@@ -41,10 +44,12 @@ router.register(r'Modelos', viewsets.ModeloViewSet, basename='modelo')
 router.register(r'MedicoesVeiculos', viewsets.MedicaoVeiculoViewSet, basename='medicao_veiculo')
 router.register(r'Medicoes', viewsets.MedicaoViewSet, basename='medicao')
 router.register(r'UnidadesMedida', viewsets.UnidadeMedidaViewSet, basename='unidade_medida')
+router.register(r'Medicaotemp', viewsets.MedicaoVeiculoTempViewSet, basename='medicao_veiculo_temp')  
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(router.urls)),
+    path("medicoes/importar-csv/", viewsets.ImportarCSVMedicoesView.as_view(), name="importar-csv-medicoes"),
 ]
 
 urlpatterns += [

@@ -33,6 +33,16 @@ class MedicaoVeiculo(models.Model):
     
     def __str__(self):
         return f"{self.VeiculoId} - {self.MedicaoId}"
+
+class MedicaoVeiculoTemp(models.Model):
+    veiculoid = models.ForeignKey('Veiculo', on_delete=models.DO_NOTHING)
+    medicaoid = models.ForeignKey('Medicao', on_delete=models.DO_NOTHING)
+    data = models.DateTimeField()
+    valor = models.DecimalField(max_digits=10, decimal_places=2)
+    arquivoid = models.CharField(max_length=256, db_index=True)
+    
+    def __str__(self):
+        return f"{self.VeiculoId} - {self.MedicaoId}"
     
 class Medicao(models.Model):
     Tipo = models.CharField(max_length=30)
@@ -46,6 +56,8 @@ class UnidadeMedida(models.Model):
     
     def __str__(self):
         return self.Nome
+    
+
 
 
     
