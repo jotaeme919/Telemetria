@@ -44,12 +44,12 @@ router.register(r'Modelos', viewsets.ModeloViewSet, basename='modelo')
 router.register(r'MedicoesVeiculos', viewsets.MedicaoVeiculoViewSet, basename='medicao_veiculo')
 router.register(r'Medicoes', viewsets.MedicaoViewSet, basename='medicao')
 router.register(r'UnidadesMedida', viewsets.UnidadeMedidaViewSet, basename='unidade_medida')
-router.register(r'Medicaotemp', viewsets.MedicaoVeiculoTempViewSet, basename='medicao_veiculo_temp')  
+router.register(r'Medicaotemp', viewsets.MedicaoVeiculoTempViewset, basename='medicao_veiculo_temp')  
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(router.urls)),
-    path("medicoes/importar-csv/", viewsets.ImportarCSVMedicoesView.as_view(), name="importar-csv-medicoes"),
+    path("medicoes/importar-csv/", viewsets.ImportarMedicaoCSVViewSet.as_view(), name="importar-csv-medicoes"),
 ]
 
 urlpatterns += [

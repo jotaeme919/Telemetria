@@ -297,9 +297,9 @@ class ImportarMedicaoCSVViewSet(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
     
-class MedicaVeiculoTempViewsets(viewsets.ModelViewSet):
+class MedicaoVeiculoTempViewset(viewsets.ModelViewSet):
     serializer_class = serializers.MedicaoVeiculoTempSerializer
-    queryset = models.MedicaoVeiculo.objects.all()
+    queryset = models.MedicaoVeiculoTemp.objects.all()
 
     @swagger_auto_schema(
         operation_description="Retorna todas as informações de medições dos arquivos",

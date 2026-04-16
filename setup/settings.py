@@ -137,3 +137,13 @@ CORS_ALLOWED_ALL_ORIGINS = True
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media' 
+
+MQTT = {
+    "HOST": "jaragua.lmq.cloudamqp.com",
+    "PORT": 1883,
+    "KEEPALIVE": 60,
+    "TOPIC": "dadosSensor",  # ajuste o(s) tópico(s)
+    "CLIENT_ID": "django-mqtt-worker",
+    "USERNAME":  'xeqynmrk:xeqynmrk',
+    "PASSWORD": 'gqQstCMuzJLNxSePi4VOZopRaByzZz49',
+}
